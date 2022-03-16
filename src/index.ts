@@ -1,4 +1,5 @@
 import { fromEvent, map, take, Observable, Subject, switchMap } from "rxjs";
+import workWithCanvas from "./canvas";
 
 const btnElement = document.querySelector('.btn');
 const data$: Subject<string[]> = new Subject();
@@ -43,3 +44,5 @@ data$
     else {result = data.text};
     document.querySelector('h3')!.textContent = result;
   });
+
+workWithCanvas();
