@@ -1,48 +1,71 @@
-import { fromEvent, map, take, Observable, Subject, switchMap } from "rxjs";
-import workWithCanvas from "./canvas";
+interface ComponentGroupElement {
+  node?: string;
+  class?: string;
+  content?: string;
+  func?: Function;
+  children?: Array<ComponentGroupElement>;
+}
 
-const btnElement = document.querySelector('.btn');
-const data$: Subject<string[]> = new Subject();
-const passedData: string = 'your-name-Here';
-let firstFinalResult: string = '';
+class DfrazeBase {
+  constructor(private rootDomElement: HTMLDivElement) {}
 
-const isDash$: Observable<{active: Boolean, text: string}> = new Observable(subscriber => {
-  if (passedData.includes('-')) {
-    subscriber.next({active: true, text: passedData});
-  } else {
-    subscriber.next({active: false, text: firstFinalResult});
-  }
-});
+  createDomElement(
+    node: string, config: {parent?: Element, class?: string, content?: string, func?: Function}, 
+  ) {
+    if (node.length !== 0) {
+      const element: HTMLElement = document.createElement(node);      
+      
+      if (Reflect.ownKeys(config).length !== 0) {
+        if (config.class) {element.classList.add(config.class)};
+        if (config.content) {
+          element.innerHTML = config.func ? config.func(config.content) : config.content;
+        };
+      };
 
-fromEvent(btnElement!, 'click')
-  .subscribe(() => {data$.next([passedData])});
-
-const transformText = (text: string, active: Boolean): string => {
-  const stringData: string[] = text.split(!active ? ' ' : '-');
-  let result: string = '';
-
-  for (let item of stringData) {
-    if (item.length !== 0) {
-      const endOfWord: string = item.slice(1, item.length).toLowerCase();
-      result += item[0].toUpperCase() + endOfWord;
+      (config.parent || this.rootDomElement).append(element);
     }
   }
 
-  if (!active) {firstFinalResult = result};
-  return result;
+  createComponent(
+    config: {name: string, group?: {
+      main: ComponentGroupElement, firstLevel?: Array<ComponentGroupElement>
+    }}
+  ) {
+    console.log(config);
+  }
 }
 
-data$
-  .pipe(
-    map(data => {return transformText(data[0], false)}),
-    switchMap(() => {return isDash$}),
-    take(1)
-  ).subscribe(data => {
-    let result: string = '';
-    if (data.active) {result = transformText(data.text, true)} 
-    
-    else {result = data.text};
-    document.querySelector('h3')!.textContent = result;
-  });
+const base = new DfrazeBase(document.querySelector('.dfraze-root')!);
 
-workWithCanvas();
+base.createDomElement('h2', {
+  parent: document.querySelector('.dfraze-root')!,
+  class: 'test-class', 
+  content: 'I love programming',
+  func(content: string) {return content.toUpperCase()}
+});
+
+base.createDomElement('div', {class: 'wrap'});
+base.createDomElement('h3', {parent: document.querySelector('.wrap')!, content: 'It is inside div'});
+
+base.createComponent({
+  name: 'main',
+  group: {
+    main: {
+      node: 'section',
+      class: 'main-section',
+      content: 'My first section',
+      children: [
+        {
+          node: 'child',
+          class: 'main-child',
+          content: 'My first child',
+        },
+        {
+          node: 'child',
+          class: 'main-child',
+          content: 'My second child',
+        }
+      ]
+    }
+  }
+});
