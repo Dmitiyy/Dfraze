@@ -1,51 +1,47 @@
-interface ComponentGroupElement {
-  node?: string;
-  class?: string;
-  content?: string;
-  func?: Function;
-  children?: Array<ComponentGroupElement>;
-}
+import { Common } from "./common";
+import { DfrazeComponent } from "./component";
+import { Component, DomConfig } from "./types";
 
-class DfrazeBase {
-  constructor(private rootDomElement: HTMLDivElement) {}
+export class DfrazeBase extends Common {
+  public components!: Array<Component>;
 
-  createDomElement(
-    node: string, config: {parent?: Element, class?: string, content?: string, func?: Function}, 
-  ) {
+  constructor(private rootDomElement: HTMLDivElement) {
+    super();
+    this.components = [];
+  }
+
+  createElement(node: string, config: DomConfig) {
     if (node.length !== 0) {
-      const element: HTMLElement = document.createElement(node);      
-      
       if (Reflect.ownKeys(config).length !== 0) {
-        if (config.class) {element.classList.add(config.class)};
-        if (config.content) {
-          element.innerHTML = config.func ? config.func(config.content) : config.content;
-        };
+        const result = this.createDomElement(
+          config.parent!, config.class!, config.content!, node, this.rootDomElement, 
+        );
       };
-
-      (config.parent || this.rootDomElement).append(element);
     }
   }
 
-  createComponent(
-    config: {name: string, group?: {
-      main: ComponentGroupElement, firstLevel?: Array<ComponentGroupElement>
-    }}
-  ) {
-    console.log(config);
+  createComponent(config: Component) {
+    this.components.push(config);
+    return new DfrazeComponent({...config}, this.rootDomElement);
+  }
+
+  render() {
+    console.log(this.components);
   }
 }
 
 const base = new DfrazeBase(document.querySelector('.dfraze-root')!);
 
-base.createDomElement('h2', {
+base.createElement('h2', {
   parent: document.querySelector('.dfraze-root')!,
   class: 'test-class', 
   content: 'I love programming',
-  func(content: string) {return content.toUpperCase()}
+  attributes: [{key: 'class', value: 'test-2'}],
+  transformContent(content: string) {return content.toUpperCase()}
 });
 
-base.createDomElement('div', {class: 'wrap'});
-base.createDomElement('h3', {parent: document.querySelector('.wrap')!, content: 'It is inside div'});
+base.createElement('div', {class: 'wrap'});
+base.createElement('h3', {parent: '.wrap', content: 'It is inside div'});
 
 base.createComponent({
   name: 'main',
@@ -69,3 +65,9 @@ base.createComponent({
     }
   }
 });
+
+const firstComponent = base.createComponent({name: 'second'});
+firstComponent.groupMain({parent: '.wrap', class: 'main-wrap', content: 'hello', node: 'div'});
+firstComponent.render();
+
+base.render();
