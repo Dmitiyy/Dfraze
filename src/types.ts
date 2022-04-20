@@ -2,20 +2,20 @@ export interface DomConfig {
   parent?: Element | string;
   class?: string;
   content?: string; 
-  transformContent?: Function; 
   attributes?: Array<{key: string; value: string}>;
 }
 
 export interface ComponentGroupElement extends DomConfig {
   node?: string;
+  target?: HTMLElement;
   children?: Array<ComponentGroupElement>;
 }
 
 export interface ComponentGroup {
-  main: ComponentGroupElement, firstLevel?: Array<ComponentGroupElement>
+  data: ComponentGroupElement
 }
 
 export interface Component {
   name: string, 
-  group?: ComponentGroup
+  component?: ComponentGroup
 }

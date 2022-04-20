@@ -19,6 +19,10 @@ export class Common {
     }
 
     (foundDomElement! || root).append(createdDomElement);
-    return {parent: foundDomElement!, class: elemClass, content: content, node: node};
+
+    return {
+      parent: foundDomElement!, class: elemClass, content: content, node: node, 
+      target: createdDomElement
+    };
   }
 }
