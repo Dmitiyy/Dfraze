@@ -19,35 +19,39 @@ export class DfrazeComponent extends Common {
     this.component.data = {...result};
   }
 
-  changeAttr(attributes: Array<{key: string; value: string}>) {
-    if (this.component.data.class) {
-      const foundDomElement = document.querySelector(`.${this.component.data.class}`);
+  #searchNode = (element: any) => {
+    return typeof element === 'string' ? document.querySelector(`.${element}`) : element;
+  }
 
-      if (foundDomElement) {
-        for (let attr of attributes) {foundDomElement.setAttribute(attr.key, attr.value)};
-      }
-    }  
+  changeAttr(attributes: Array<{key: string; value: string}>) {
+    const element = this.findComponentTarget(this.component.data);
+    const foundDomElement: any = this.#searchNode(element);
+
+    if (foundDomElement) {
+      for (let attr of attributes) {foundDomElement.setAttribute(attr.key, attr.value)};
+    }
   }
 
   createChild(config: {class?: string, content?: string, node: string}) {
-    if (this.component.data.class) {
-      this.createDomElement(
-        `.${this.component.data.class}`, config.class!, config.content!, config.node, this.rootDomElement
-      );
-    }
-    console.log(this.component.data);
-    
+    const parent: any = this.findComponentTarget(this.component.data);
+
+    this.createDomElement(
+      parent, config.class!, config.content!, config.node, 
+      this.rootDomElement
+    );
   }
 
   transformContent(transform: Function) {
     const initialContent: string = this.component.data.content!;
     let result: string = initialContent;
+
+    const element: any = this.findComponentTarget(this.component.data);
+    const node = this.#searchNode(element);
     
     if (initialContent) {
       this.component.data.content = !transform(initialContent) ? result : transform(initialContent);
       result = this.component.data.content!;
     }; 
-
-    document.querySelector(`.${this.component.data.class}`)!.innerHTML = result;
+    node.innerHTML = result;
   }
 }

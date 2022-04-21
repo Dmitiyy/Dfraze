@@ -13,7 +13,7 @@ export class DfrazeBase extends Common {
   createElement(node: string, config: DomConfig) {
     if (node.length !== 0) {
       if (Reflect.ownKeys(config).length !== 0) {
-        const result = this.createDomElement(
+        this.createDomElement(
           config.parent!, config.class!, config.content!, node, this.rootDomElement, 
         );
       };
@@ -36,15 +36,14 @@ const base = new DfrazeBase(document.querySelector('.dfraze-root')!);
 base.createElement('h2', {
   parent: document.querySelector('.dfraze-root')!,
   class: 'test-class', 
-  content: 'I love programming',
-  attributes: [{key: 'class', value: 'test-2'}],
+  content: 'I love programming'
 });
 
 base.createElement('div', {class: 'wrap'});
 base.createElement('h3', {parent: '.wrap', content: 'It is inside div'});
 
 const firstComponent = base.createComponent({name: 'second'});
-firstComponent.baseConfig({parent: '.wrap', class: 'main-wrap', content: 'hello', node: 'div'});
+firstComponent.baseConfig({parent: '.wrap', content: 'hello', node: 'div'});
 
 firstComponent.changeAttr([{key: 'id', value: 'testID'}]);
 firstComponent.transformContent((content: string) => content.toUpperCase());
