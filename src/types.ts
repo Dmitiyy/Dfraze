@@ -19,3 +19,15 @@ export interface Component {
   name: string, 
   component?: ComponentGroup
 }
+
+export interface ComponentChild {
+  data?: ComponentGroupElement
+}
+
+export interface CreatedElement {
+  parent: any;
+  class: string;
+  content: string;
+  node: string;
+  target: HTMLElement;
+}

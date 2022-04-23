@@ -33,12 +33,6 @@ export class DfrazeBase extends Common {
 
 const base = new DfrazeBase(document.querySelector('.dfraze-root')!);
 
-base.createElement('h2', {
-  parent: document.querySelector('.dfraze-root')!,
-  class: 'test-class', 
-  content: 'I love programming'
-});
-
 base.createElement('div', {class: 'wrap'});
 base.createElement('h3', {parent: '.wrap', content: 'It is inside div'});
 
@@ -50,4 +44,4 @@ firstComponent.transformContent((content: string) => content.toUpperCase());
 
 firstComponent.createChild({
   node: 'section', class: 'childSection', content: 'child'
-});
+}).render();
