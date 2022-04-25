@@ -1,6 +1,9 @@
+import { Subject } from "rxjs";
 import { ComponentGroupElement, CreatedElement } from "./types";
 
 export class Common {
+  protected subData: Subject<any> = new Subject();
+
   protected createDomElement(
     parent: Element | string, elemClass: string, content: string, 
     node: string, root: HTMLDivElement,
@@ -21,11 +24,13 @@ export class Common {
     }
 
     (foundDomElement! || root).append(createdDomElement);
-
-    return {
-      parent: foundDomElement!, class: elemClass, content: content, node: node, 
-      target: createdDomElement
+    
+    const result = {
+      parent: foundDomElement!, class: elemClass, content: content, node: node, target: createdDomElement
     };
+
+    this.subData.next(result);
+    return result;
   }
 
   protected findComponentTarget(config: ComponentGroupElement) {
@@ -38,16 +43,18 @@ export class Common {
   }
 
   #searchNode = (element: any) => {
-    return typeof element === 'string' ? document.querySelector(`.${element}`) : element;
+    return typeof element === 'string' ? document.querySelector(`${element}`) : element;
   }
 
   protected changeElemAttr(component: any, attributes: Array<{key: string; value: string}>) {
-    const element = this.findComponentTarget(component.data);
+    const element = this.findComponentTarget(component.data ? component.data : component);
     const foundDomElement: any = this.#searchNode(element);
 
     if (foundDomElement) {
       for (let attr of attributes) {foundDomElement.setAttribute(attr.key, attr.value)};
     }
+
+    this.subData.next(attributes);
   }
 
   protected createElemChild(
@@ -62,6 +69,7 @@ export class Common {
       rootDomElement
     );
 
+    this.subData.next(result);
     return result;
   }
 
@@ -76,6 +84,8 @@ export class Common {
       component.data.content = !transform(initialContent) ? result : transform(initialContent);
       result = component.data.content!;
     }; 
+
+    this.subData.next(result);
     node.innerHTML = result;
   }
 }

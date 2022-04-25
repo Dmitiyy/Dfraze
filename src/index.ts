@@ -42,6 +42,15 @@ firstComponent.baseConfig({parent: '.wrap', content: 'hello', node: 'div'});
 firstComponent.changeAttr([{key: 'id', value: 'testID'}]);
 firstComponent.transformContent((content: string) => content.toUpperCase());
 
-firstComponent.createChild({
+firstComponent.render();
+
+const myChild = firstComponent.createChild({
   node: 'section', class: 'childSection', content: 'child'
-}).render();
+});
+
+myChild.changeAttr([{key: 'id', value: 'asdf'}]);
+myChild.transformContent(() => 'changed');
+
+myChild.createChild({node: 'p', content: '...child'});
+
+myChild.render();

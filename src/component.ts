@@ -22,14 +22,24 @@ export class DfrazeComponent extends Common {
 
   changeAttr(attributes: Array<{key: string; value: string}>) {
     this.changeElemAttr(this.component, attributes);
+    this.component.data!.attributes = [...attributes];
   }
 
   createChild(config: {class?: string, content?: string, node: string}) {
     const result = this.createElemChild(this.component, config, this.rootDomElement);
-    return new DfrazeChild(result);
+    this.component.data!.children = [{...result}];
+    
+    return new DfrazeChild(result, this.rootDomElement);
   }
 
   transformContent(transform: Function) {
     this.transformElemContent(this.component, transform);
+  }
+
+  render() {
+    // console.log('Component: ', this.component);
+    this.subData.subscribe(observer => {
+      console.log(observer);
+    })
   }
 }
