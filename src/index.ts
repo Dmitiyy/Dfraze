@@ -23,6 +23,7 @@ export class DfrazeBase extends Common {
   createComponent(config: Component) {
     const componentClass = new DfrazeComponent(this.rootDomElement);
     this.components.push({name: config.name, component: Object.assign(componentClass.component)});
+
     return componentClass;
   }
 

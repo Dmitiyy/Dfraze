@@ -1,9 +1,7 @@
-import { Subject } from "rxjs";
+import { DfrazeComponent } from "./component";
 import { ComponentGroupElement, CreatedElement } from "./types";
 
 export class Common {
-  protected subData: Subject<any> = new Subject();
-
   protected createDomElement(
     parent: Element | string, elemClass: string, content: string, 
     node: string, root: HTMLDivElement,
@@ -29,7 +27,6 @@ export class Common {
       parent: foundDomElement!, class: elemClass, content: content, node: node, target: createdDomElement
     };
 
-    this.subData.next(result);
     return result;
   }
 
@@ -53,8 +50,6 @@ export class Common {
     if (foundDomElement) {
       for (let attr of attributes) {foundDomElement.setAttribute(attr.key, attr.value)};
     }
-
-    this.subData.next(attributes);
   }
 
   protected createElemChild(
@@ -69,7 +64,6 @@ export class Common {
       rootDomElement
     );
 
-    this.subData.next(result);
     return result;
   }
 
@@ -85,7 +79,14 @@ export class Common {
       result = component.data.content!;
     }; 
 
-    this.subData.next(result);
     node.innerHTML = result;
+  }
+
+  protected changeChildData(targetName?: string, childData?: any) {
+    //TODO 1. Get all components 
+    //TODO 2. Find parent component
+    //TODO 3. Find a certain child in the parent component
+    //TODO 4. Change a child data there
+    //TODO 5. Define new components array 
   }
 }

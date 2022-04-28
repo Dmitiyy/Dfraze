@@ -27,8 +27,12 @@ export class DfrazeComponent extends Common {
 
   createChild(config: {class?: string, content?: string, node: string}) {
     const result = this.createElemChild(this.component, config, this.rootDomElement);
-    this.component.data!.children = [{...result}];
+    let existingChilds: any = [];
     
+    const {data} = this.component;
+    if (data && data.children! && data.children!.length !== 0) {existingChilds = [...data.children!]};
+
+    this.component.data!.children = [...existingChilds, {...result}];
     return new DfrazeChild(result, this.rootDomElement);
   }
 
@@ -37,9 +41,6 @@ export class DfrazeComponent extends Common {
   }
 
   render() {
-    // console.log('Component: ', this.component);
-    this.subData.subscribe(observer => {
-      console.log(observer);
-    })
+    console.log('Component: ', this.component);
   }
 }

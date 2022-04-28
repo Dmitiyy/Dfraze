@@ -16,19 +16,22 @@ export class DfrazeChild extends Common {
 
   createChild(config: {class?: string, content?: string, node: string}) {
     const result = this.createElemChild(this.child, config, this.rootDomElement);
-    this.child.data!.children = [{...result}];
+    let existingChilds: any = [];
     
+    const {data} = this.child;
+    if (data && data.children! && data.children!.length !== 0) {existingChilds = [...data.children!]};
+    
+    this.child.data!.children = [...existingChilds, {...result}];
     return new DfrazeChild(result, this.rootDomElement);
   }
 
   transformContent(transform: Function) {
     this.transformElemContent(this.child, transform);
+    this.changeChildData();
+
   }
 
   render() {
     // console.log('Child: ', this.child.data);
-    this.subData.subscribe(observer => {
-      console.log(observer);
-    })
   }
 }
