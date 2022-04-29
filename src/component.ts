@@ -21,8 +21,10 @@ export class DfrazeComponent extends Common {
   }
 
   changeAttr(attributes: Array<{key: string; value: string}>) {
+    const attrs = !this.component.data!.attributes! ? [] : this.component.data!.attributes!;
+
     this.changeElemAttr(this.component, attributes);
-    this.component.data!.attributes = [...attributes];
+    this.component.data!.attributes = [...attrs, ...attributes];
   }
 
   createChild(config: {class?: string, content?: string, node: string}) {
@@ -33,14 +35,10 @@ export class DfrazeComponent extends Common {
     if (data && data.children! && data.children!.length !== 0) {existingChilds = [...data.children!]};
 
     this.component.data!.children = [...existingChilds, {...result}];
-    return new DfrazeChild(result, this.rootDomElement);
+    return new DfrazeChild(result, this.rootDomElement, this.component);
   }
 
   transformContent(transform: Function) {
     this.transformElemContent(this.component, transform);
-  }
-
-  render() {
-    console.log('Component: ', this.component);
   }
 }

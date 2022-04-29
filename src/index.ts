@@ -26,10 +26,6 @@ export class DfrazeBase extends Common {
 
     return componentClass;
   }
-
-  render() {
-    console.log(this.components);
-  }
 }
 
 const base = new DfrazeBase(document.querySelector('.dfraze-root')!);
@@ -43,8 +39,6 @@ firstComponent.baseConfig({parent: '.wrap', content: 'hello', node: 'div'});
 firstComponent.changeAttr([{key: 'id', value: 'testID'}]);
 firstComponent.transformContent((content: string) => content.toUpperCase());
 
-firstComponent.render();
-
 const myChild = firstComponent.createChild({
   node: 'section', class: 'childSection', content: 'child'
 });
@@ -53,5 +47,3 @@ myChild.changeAttr([{key: 'id', value: 'asdf'}]);
 myChild.transformContent(() => 'changed');
 
 myChild.createChild({node: 'p', content: '...child'});
-
-myChild.render();

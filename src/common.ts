@@ -1,4 +1,3 @@
-import { DfrazeComponent } from "./component";
 import { ComponentGroupElement, CreatedElement } from "./types";
 
 export class Common {
@@ -80,13 +79,6 @@ export class Common {
     }; 
 
     node.innerHTML = result;
-  }
-
-  protected changeChildData(targetName?: string, childData?: any) {
-    //TODO 1. Get all components 
-    //TODO 2. Find parent component
-    //TODO 3. Find a certain child in the parent component
-    //TODO 4. Change a child data there
-    //TODO 5. Define new components array 
+    return result;
   }
 }
