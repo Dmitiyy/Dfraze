@@ -2,7 +2,7 @@ import { Common } from "./common";
 import { ComponentChild, ComponentGroup, CreatedElement } from "./types";
 
 export class DfrazeChild extends Common {
-  private child: ComponentChild;
+  public child: ComponentChild;
   
   constructor(
     private mainConfig: CreatedElement, private rootDomElement: HTMLDivElement,
@@ -16,7 +16,7 @@ export class DfrazeChild extends Common {
     const attrs = !this.child.data!.attributes! ? [] : this.child.data!.attributes!;
     const result = [...attrs, ...attributes];
 
-    this.changeElemAttr(this.child.data, attributes);
+    this.changeElemAttr(this.child, result);
     this.child.data!.attributes = result;
 
     this.#changeChildData({key: 'attributes', value: result});

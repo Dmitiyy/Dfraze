@@ -17,7 +17,7 @@ export class Common {
     if (content) {createdDomElement.textContent = content};
 
     if (classDomElement.length !== 0) {
-      createdDomElement.classList.add(classDomElement);
+      createdDomElement.setAttribute('class', classDomElement);
     }
 
     (foundDomElement! || root).append(createdDomElement);
@@ -46,9 +46,7 @@ export class Common {
     const element = this.findComponentTarget(component.data ? component.data : component);
     const foundDomElement: any = this.#searchNode(element);
 
-    if (foundDomElement) {
-      for (let attr of attributes) {foundDomElement.setAttribute(attr.key, attr.value)};
-    }
+    for (let attr of attributes) {component.data.target.setAttribute(attr.key, attr.value)};
   }
 
   protected createElemChild(
@@ -59,7 +57,7 @@ export class Common {
     const parent: any = this.findComponentTarget(component.data);
 
     const result = this.createDomElement(
-      parent, config.class!, config.content!, config.node, 
+      component.data.target, config.class!, config.content!, config.node, 
       rootDomElement
     );
 
