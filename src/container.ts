@@ -14,5 +14,5 @@ export const ContainerComponent = (base: DfrazeBase) => {
     {title: 'Captain America', image: 'images/cap-bg.jpg'},
   ];
 
-  cardsData.forEach((item, index) => {panelCard(panel, item, index)});
+  cardsData.forEach((item, index) => {panelCard(panel, item, index, base)});
 }

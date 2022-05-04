@@ -23,7 +23,12 @@ export class DfrazeComponent extends Common {
   changeAttr(attributes: Array<{key: string; value: string}>) {
     const attrs = !this.component.data!.attributes! ? [] : this.component.data!.attributes!;
 
-    this.changeElemAttr(this.component, attributes);
+    if (attributes.length === 1) {
+      this.component.data?.target?.setAttribute(attributes[0].key, attributes[0].value);
+    } else {
+      this.changeElemAttr(this.component, attributes);
+    }
+
     this.component.data!.attributes = [...attrs, ...attributes];
   }
 

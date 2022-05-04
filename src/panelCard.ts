@@ -1,7 +1,8 @@
+import { DfrazeBase } from "./lib";
 import { DfrazeChild } from "./lib/child";
 
 export const panelCard = (
-  panel: DfrazeChild, config: {title: string, image: string}, index: number
+  panel: DfrazeChild, config: {title: string, image: string}, index: number, base: DfrazeBase
 ) => {
   let activeCard = 0;
 
@@ -16,10 +17,7 @@ export const panelCard = (
 
   const checkAll = () => {
     if (activeCard === index) {
-      document.querySelectorAll('.panel__card').forEach(item => {
-        item.classList.remove('panel__card-active');
-      });
-      // card.child.data?.target?.classList.add('panel__card-active');
+      base.deleteAllClasses('panel__card', 'panel__card-active');
       card.changeAttr([{key: 'class', value: `${card.child.data?.class} ` + 'panel__card-active'}]);
     }
   }
@@ -30,6 +28,3 @@ export const panelCard = (
     checkAll();
   });
 }
-
-//TODO 1. Get items collection
-//TODO 2. Change attrs separately

@@ -16,9 +16,13 @@ export class DfrazeChild extends Common {
     const attrs = !this.child.data!.attributes! ? [] : this.child.data!.attributes!;
     const result = [...attrs, ...attributes];
 
-    this.changeElemAttr(this.child, result);
-    this.child.data!.attributes = result;
+    if (attributes.length === 1) {
+      this.child.data?.target?.setAttribute(attributes[0].key, attributes[0].value);
+    } else {
+      this.changeElemAttr(this.child, result);
+    }
 
+    this.child.data!.attributes = result;
     this.#changeChildData({key: 'attributes', value: result});
   }
 

@@ -26,4 +26,8 @@ export class DfrazeBase extends Common {
 
     return componentClass;
   }
+
+  deleteAllClasses(fromClassName: string, which: string) {
+    this.deleteAllClassesCommon(fromClassName, which, this.components);
+  }
 }

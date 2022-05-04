@@ -79,4 +79,10 @@ export class Common {
     node.innerHTML = result;
     return result;
   }
+
+  protected deleteAllClassesCommon(fromClassName: string, which: string, components: any) {
+    document.querySelectorAll(`.${fromClassName}`).forEach(item => {
+      item.classList.remove(`${which}`);
+    });
+  }
 }
